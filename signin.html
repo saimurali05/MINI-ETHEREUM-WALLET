@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Mini Ethereum Wallet - Sign Up</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">🦊 MiniWallet</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="wallet.html" id="walletLink">Wallet</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+
+  <div class="main-container">
+    <div class="glass-card auth-card">
+      <h1>Create a New Wallet</h1>
+      <p>Click the button below to generate a new, secure Ethereum wallet.</p>
+
+      <!-- Button looks same as before -->
+      <button id="redirectToCreate" class="cta-button">Generate New Wallet</button>
+
+      <hr>
+      <p class="auth-switch">Already have a wallet? <a href="login.html">Login here</a>.</p>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    // Disable Wallet link if not logged in
+    if (!sessionStorage.getItem('miniWalletSessionKey')) {
+      document.getElementById('walletLink').classList.add('disabled');
+    }
+
+    // Redirect button to create.html
+    document.getElementById("redirectToCreate").addEventListener("click", () => {
+      window.location.href = "create.html";
+    });
+  </script>
+</body>
+</html>
