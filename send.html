@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+  
+  <title>Mini Ethereum Wallet</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+  <nav class="navbar">
+    <div class="nav-logo">🦊 MiniWallet</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="send.html">Send</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+  <div class="main-container">
+    <h1>🦊 Mini Ethereum Wallet</h1>
+
+    <!-- Email Verification Form (initially visible) -->
+    <div id="emailForm" class="glass-card">
+      <h3>Create Wallet</h3>
+      <p>Enter your email to receive a verification OTP</p>
+      <div class="form-group">
+        <input type="email" id="email" placeholder="Enter your email">
+        <div class="validation-error" id="emailError"></div>
+      </div>
+      <button id="submitEmailBtn">Submit Email</button>
+    </div>
+
+    <!-- OTP Verification Form (initially hidden) -->
+    <div id="otpForm" class="glass-card" style="display: none;">
+      <h3>Verify OTP</h3>
+      <p>We've sent a verification code to your email</p>
+      <div class="form-group">
+        <input type="text" id="otp" placeholder="Enter OTP" maxlength="6">
+        <div class="validation-error" id="otpError"></div>
+      </div>
+      <button id="submitOtpBtn">Verify & Create Wallet</button>
+    </div>
+
+    <div class="glass-card" id="walletInfo" style="display: none;">
+      <button id="openImportModalBtn" class="secondary">Import Wallet</button>
+      <p><strong>Address:</strong> <span id="address">-</span>
+        <button id="copyAddressBtn">📋 Copy</button>
+      </p>
+      <p><strong>Private Key:</strong> <span id="privateKey">-</span></p>
+      <p><strong>Balance:</strong> <span id="balance">0 ETH</span></p>
+      <div id="faucet-info" class="faucet-info" style="display: none;">
+        <p>Your balance is zero. Get some free test ETH to start sending transactions.</p>
+        <a href="https://sepoliafaucet.com/" target="_blank" rel="noopener noreferrer">
+            <button class="secondary">Go to Sepolia Faucet</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="glass-card">
+      <h3>Send ETH</h3>
+      <div class="form-group">
+        <div class="input-with-button">
+          <input type="text" id="to" placeholder="Recipient address">
+          <button id="openAddressBookBtn" class="icon-button" title="Open Address Book">📖</button>
+        </div>
+        <div class="validation-error"></div>
+      </div>
+      <div class="form-group">
+        <input type="text" id="amount" placeholder="Amount in ETH">
+        <div class="validation-error"></div>
+      </div>
+      <p class="gas-estimate">Estimated Fee: <span id="gasFee">-</span> ETH</p>
+      <button id="sendEthBtn">🚀 Send</button>
+      <p id="txStatus"></p>
+    </div>
+  </div>
+
+  <!-- Transaction History Card -->
+  <div id="historyCard" class="glass-card" style="display: none;">
+    <h3>Transaction History</h3>
+    <div id="txList">
+      <!-- Transactions will be dynamically inserted here -->
+    </div>
+  </div>
+  <div id="toast-container"></div>
+
+  <!-- Import Wallet Modal -->
+  <div id="importModal" class="modal-overlay">
+    <div class="modal-content">
+      <span id="closeModalBtn" class="close-button">&times;</span>
+      <h3>Import Wallet</h3>
+      <p>Enter your private key to import an existing wallet.</p>
+      <div class="form-group">
+        <input type="password" id="importPrivateKeyInput" placeholder="Enter private key (it will not be stored)">
+        <div class="validation-error"></div>
+      </div>
+      <button id="importWalletBtn" style="margin-top: 0;">Import</button>
+    </div>
+  </div>
+
+  <!-- Address Book Modal -->
+  <div id="addressBookModal" class="modal-overlay">
+    <div class="modal-content">
+      <span id="closeAddressBookModalBtn" class="close-button">&times;</span>
+      <h3>Address Book</h3>
+      <div id="contactList">
+        <!-- Contacts will be dynamically inserted here -->
+      </div>
+      <hr>
+      <h4>Add New Contact</h4>
+      <div class="form-group">
+        <input type="text" id="contactNameInput" placeholder="Contact Name">
+        <div class="validation-error"></div>
+      </div>
+      <div class="form-group">
+        <input type="text" id="contactAddressInput" placeholder="Contact Address (0x...)">
+        <div class="validation-error"></div>
+      </div>
+      <button id="addContactBtn" style="margin-top: 0;">Add Contact</button>
+    </div>
+  </div>
+
+  <script>
+    // Handle email submission and OTP verification
+    document.getElementById('submitEmailBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      if (!email) {
+        document.getElementById('emailError').textContent = 'Email is required';
+        return;
+      }
+      
+      try {
+        const response = await fetch('http://localhost:3000/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        
+        if (response.ok) {
+          document.getElementById('emailForm').style.display = 'none';
+          document.getElementById('otpForm').style.display = 'block';
+          showToast('OTP sent to your email', 'success');
+        } else {
+          document.getElementById('emailError').textContent = 'Failed to send OTP';
+          showToast('Failed to send OTP', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('emailError').textContent = 'Network error';
+      }
+    });
+
+    document.getElementById('submitOtpBtn').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const otp = document.getElementById('otp').value;
+      
+      if (!otp) {
+        document.getElementById('otpError').textContent = 'OTP is required';
+        return;
+      }
+      
+      try {
+        const response = await fetch('http://localhost:3000/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, otp })
+        });
+        
+        const result = await response.json();
+        if (result.verified) {
+          // OTP verified - show wallet creation UI and generate wallet
+          document.getElementById('otpForm').style.display = 'none';
+          document.getElementById('walletInfo').style.display = 'block';
+          showToast('OTP verified successfully!', 'success');
+          document.getElementById('generateWalletBtn').click(); // Trigger wallet creation
+        } else {
+          document.getElementById('otpError').textContent = 'Invalid OTP';
+          showToast('Invalid OTP', 'error');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('otpError').textContent = 'Verification failed';
+      }
+    });
+  </script>
+  
+  <script type="module" src="wallet.js"></script>
+</body>
+</html>
