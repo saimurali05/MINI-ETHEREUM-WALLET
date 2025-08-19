@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Ethereum Wallet - Create Account</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .navbar {
+      width: 100%;
+      padding: 15px 40px;
+      background: rgba(0, 0, 0, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-links a {
+      color: #fff;
+      margin-left: 20px;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      width: 360px;
+      margin-top: 120px;
+      text-align: center;
+    }
+
+    .container h2 {
+      margin-bottom: 10px;
+      font-size: 1.6rem;
+      color: #fff;
+    }
+
+    .container p {
+      margin-bottom: 20px;
+      color: #ddd;
+      font-size: 0.9rem;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      margin: 10px 0 5px;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-size: 0.95rem;
+    }
+
+    .phone-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .phone-input select {
+      flex: 1;
+    }
+
+    .phone-input input {
+      flex: 2;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      background: #ff5f6d;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #e14b59;
+    }
+
+    .error {
+      color: #ffcccc;
+      font-size: 0.85rem;
+      margin-top: -10px;
+      margin-bottom: 10px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-logo">🦊 MiniWallet</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="wallet.html">Wallet</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2>Create Account</h2>
+    <p>Fill in your details below to create your account.</p>
+    <form id="createForm">
+      <label for="firstName">First Name</label>
+      <input type="text" id="firstName" placeholder="Enter your first name" required>
+
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" placeholder="Enter your last name" required>
+
+      <label for="email">Email Address</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+      <div id="emailError" class="error"></div>
+
+      <label for="phone">Phone Number</label>
+      <div class="phone-input">
+        <select id="countryCode">
+          <option value="+91">🇮🇳 +91</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+61">🇦🇺 +61</option>
+        </select>
+        <input type="text" id="phone" placeholder="Enter phone number" required>
+      </div>
+      <div id="phoneError" class="error"></div>
+
+      <button type="submit" class="btn">Create Account</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("createForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      let email = document.getElementById("email").value;
+      let phone = document.getElementById("phone").value;
+      let emailError = document.getElementById("emailError");
+      let phoneError = document.getElementById("phoneError");
+
+      emailError.textContent = "";
+      phoneError.textContent = "";
+
+      // Email Validation
+      let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!email.match(emailPattern)) {
+        emailError.textContent = "Please enter a valid email address.";
+        return;
+      }
+
+      // Phone Validation (only numbers, 7-12 digits)
+      let phonePattern = /^[0-9]{7,12}$/;
+      if (!phone.match(phonePattern)) {
+        phoneError.textContent = "Enter a valid phone number (7-12 digits).";
+        return;
+      }
+
+      alert("Account created successfully!");
+      window.location.href = "signin.html"; // Redirect after success
+    });
+  </script>
+
+</body>
+</html>
