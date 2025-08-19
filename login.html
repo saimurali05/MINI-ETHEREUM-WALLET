@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Mini Ethereum Wallet - Login</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">🦊 MiniWallet</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="wallet.html" id="walletLink">Wallet</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+  <div class="main-container">
+    <div class="glass-card auth-card">
+      <h1>Login to MiniWallet</h1>
+      <p>Enter your private key to access your wallet.</p>
+      <div class="form-group">
+        <input type="password" id="importPrivateKeyInput" placeholder="Enter your private key" aria-invalid="false" aria-describedby="key-error-message">
+        <div id="key-error-message" class="validation-error" role="alert"></div>
+      </div>
+      <button id="importWalletBtn">Login / Import Wallet</button>
+      <p id="loginStatus"></p>
+      <hr>
+      <p class="auth-switch">Don't have a wallet? <a href="signin.html">Create a new one</a>.</p>
+    </div>
+  </div>
+  <div id="toast-container"></div>
+  <script type="module" src="auth.js"></script>
+  <script>
+    if (!sessionStorage.getItem('miniWalletSessionKey')) {
+      document.getElementById('walletLink').classList.add('disabled');
+    }
+  </script>
+</body>
+</html>
