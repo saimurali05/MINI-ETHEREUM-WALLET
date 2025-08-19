@@ -1,0 +1,49 @@
+# MINI-ETHEREUM-WALLET
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Mini Ethereum Wallet - Home</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-logo">🦊 MiniWallet</div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="wallet.html" id="walletLink">Wallet</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+  <div class="main-container">
+    <div class="hero-section">
+      <h1>Welcome to MiniWallet</h1>
+      <p class="subtitle">A simple, client-side Ethereum wallet for managing your testnet assets.</p>
+      <p>Create a new wallet, import an existing one, and send transactions with ease.</p>
+      <a href="wallet.html">
+        <button class="cta-button">Launch Wallet</button>
+      </a>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card glass-card">
+        <h3>🔐 Secure & Private</h3>
+        <p>Your private keys never leave your browser. All operations are performed client-side, giving you full control over your assets.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <h3>🚀 Feature Rich</h3>
+        <p>View transaction history, manage a local address book, and see real-time gas fee estimates before you send.</p>
+      </div>
+      <div class="feature-card glass-card">
+        <h3>🛠️ Modern Tech</h3>
+        <p>Built with modern JavaScript (ESM) and the lightweight, powerful Viem library for all blockchain interactions.</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    if (!sessionStorage.getItem('miniWalletSessionKey')) {
+      document.getElementById('walletLink').classList.add('disabled');
+    }
+  </script>
+</body>
+</html>
