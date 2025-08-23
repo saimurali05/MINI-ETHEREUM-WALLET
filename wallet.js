@@ -43,7 +43,7 @@ const publicClient = createPublicClient({
 });
 
 // Etherscan API Setup
-const ETHERSCAN_API_KEY = 'YOUR_ETHERSCAN_API_KEY'; // Replace with your Etherscan API key
+const ETHERSCAN_API_KEY = 'W2SS691E3NKUTZGXV4YHF56VM67WR5U7CF'; // Replace with your Etherscan API key
 
 // App State & Constants
 const ADDRESS_BOOK_STORAGE_KEY = 'miniWalletAddressBook';
