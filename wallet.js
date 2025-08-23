@@ -6,7 +6,8 @@ import {
   parseEther,
   isAddress,
 } from 'https://esm.sh/viem';
-import { sepolia } from 'https://esm.sh/viem/chains';
+import { holesky } from 'https://esm.sh/viem/chains';
+
 import {
   generatePrivateKey,
   privateKeyToAccount,
@@ -37,7 +38,7 @@ const revealKeyBtn = document.getElementById('revealKeyBtn');
 
 // Viem Client Setup
 const publicClient = createPublicClient({
-  chain: sepolia,
+  chain: holesky,
   transport: http(),
 });
 
@@ -96,10 +97,11 @@ export async function updateWalletUI(newAccount, privateKey) {
   }
   account = newAccount;
   walletClient = createWalletClient({
-    account,
-    chain: sepolia,
-    transport: http(),
-  });
+  account,
+  chain: holesky,
+  transport: http(),
+});
+
   addressSpan.textContent = account.address;
   privateKeySpan.textContent = '••••••••••••••••••••••••••••••••••••••••••••••••••••••••';
   balanceSpan.textContent = 'Fetching...';
@@ -173,7 +175,9 @@ async function displayTransactionHistory() {
     return;
   }
   try {
-    const apiUrl = `https://api-sepolia.etherscan.io/api?module=account&action=txlist&address=${account.address}&startblock=0&endblock=99999999&sort=desc&apikey=${ETHERSCAN_API_KEY}`;
+    const apiUrl = `https://api-holesky.etherscan.io/api?module=account&action=txlist&address=${account.address}&startblock=0&endblock=99999999&sort=desc&apikey=${ETHERSCAN_API_KEY}`;
+
+
     const response = await fetch(apiUrl);
     const data = await response.json();
     if (data.status !== '1') {
